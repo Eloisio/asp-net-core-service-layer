@@ -45,9 +45,7 @@ public class TodoController : Controller
     [HttpPost]
     public IActionResult Create(FormTodoViewModel data)
     {
-        var todo = new Todo(data.Title, data.Date);
-        _context.Add(todo);
-        _context.SaveChanges();
+        _service.Create(data);
         return RedirectToAction(nameof(Index));
     }
 
