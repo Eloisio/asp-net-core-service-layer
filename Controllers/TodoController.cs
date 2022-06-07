@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TWTodoList.Contexts;
 using TWTodoList.Models;
+using TWTodoList.Services;
 using TWTodoList.ViewModels;
 
 namespace TWTodoList.Controllers;
@@ -8,10 +9,12 @@ namespace TWTodoList.Controllers;
 public class TodoController : Controller
 {
     private readonly AppDbContex _context;
+    private readonly TodoService _service;
 
-    public TodoController(AppDbContex context)
+    public TodoController(AppDbContex context, TodoService service)
     {
         _context = context;
+        _service = service;
     }
 
     public IActionResult Index()
