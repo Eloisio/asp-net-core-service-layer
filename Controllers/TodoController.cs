@@ -19,8 +19,7 @@ public class TodoController : Controller
 
     public IActionResult Index()
     {
-        var todos = _context.Todos.OrderBy(x => x.Date).ToList();
-        var viewModel = new ListTodoViewModel { Todos = todos };
+        var viewModel = _service.FindAll();
         ViewData["Title"] = "Lista de Tarefas";
         return View(viewModel);
     }
