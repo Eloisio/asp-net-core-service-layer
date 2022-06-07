@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TWTodoList.Contexts;
 using TWTodoList.Exceptions;
-using TWTodoList.Models;
 using TWTodoList.Services;
 using TWTodoList.ViewModels;
 
@@ -9,12 +7,10 @@ namespace TWTodoList.Controllers;
 
 public class TodoController : Controller
 {
-    private readonly AppDbContex _context;
     private readonly TodoService _service;
 
-    public TodoController(AppDbContex context, TodoService service)
+    public TodoController(TodoService service)
     {
-        _context = context;
         _service = service;
     }
 
@@ -81,13 +77,14 @@ public class TodoController : Controller
 
     public IActionResult ToComplete(int id)
     {
-        var todo = _context.Todos.Find(id);
-        if (todo is null)
+        try
+        {
+            _service.ToComplete(id);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (TodoNotFoundException)
         {
             return NotFound();
         }
-        todo.IsCompleted = true;
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
     }
 }
