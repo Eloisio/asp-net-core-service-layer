@@ -8,7 +8,7 @@ public class TodoEntityConfig : IEntityTypeConfiguration<Todo>
 {
     public void Configure(EntityTypeBuilder<Todo> builder)
     {
-        builder.ToTable("todos");
+        builder.ToTable("todo");
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
