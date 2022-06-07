@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TWTodoList.Contexts;
+using TWTodoList.Exceptions;
 using TWTodoList.Models;
 using TWTodoList.Services;
 using TWTodoList.ViewModels;
@@ -51,28 +52,30 @@ public class TodoController : Controller
 
     public IActionResult Edit(int id)
     {
-        var todo = _context.Todos.Find(id);
-        if (todo is null)
+        try
+        {
+            ViewData["Title"] = "Editar Tarefa";
+            var viewModel = _service.FindById(id);
+            return View("Form", viewModel);
+        }
+        catch (TodoNotFoundException)
         {
             return NotFound();
         }
-        ViewData["Title"] = "Editar Tarefa";
-        var viewModel = new FormTodoViewModel { Title = todo.Title, Date = todo.Date };
-        return View("Form", viewModel);
     }
 
     [HttpPost]
     public IActionResult Edit(int id, FormTodoViewModel data)
     {
-        var todo = _context.Todos.Find(id);
-        if (todo is null)
+        try
+        {
+            _service.UpdateById(id, data);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (TodoNotFoundException)
         {
             return NotFound();
         }
-        todo.Title = data.Title;
-        todo.Date = data.Date;
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
     }
 
     public IActionResult ToComplete(int id)
