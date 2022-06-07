@@ -27,14 +27,15 @@ public class TodoController : Controller
 
     public IActionResult Delete(int id)
     {
-        var todo = _context.Todos.Find(id);
-        if (todo is null)
+        try
+        {
+            _service.DeleteById(id);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (TodoNotFoundException)
         {
             return NotFound();
         }
-        _context.Remove(todo);
-        _context.SaveChanges();
-        return RedirectToAction(nameof(Index));
     }
 
     public IActionResult Create()

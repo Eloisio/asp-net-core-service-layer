@@ -48,4 +48,15 @@ public class TodoService
         todo.Date = data.Date;
         _context.SaveChanges();
     }
+
+    public void DeleteById(int id)
+    {
+        var todo = _context.Todos.Find(id);
+        if (todo is null)
+        {
+            throw new TodoNotFoundException();
+        }
+        _context.Remove(todo);
+        _context.SaveChanges();
+    }
 }
